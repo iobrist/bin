@@ -1,0 +1,50 @@
+submit=dustinryerson
+branch=ee-6.2.x
+if [ $# -eq 0 ]; then
+    echo "No args:"
+    echo "$submit"
+    echo "$branch"
+else
+    # logic to only set branch
+    # checks if $1 is -b
+    if [ $1 = "-b" ] ; then
+        echo "Only branch will be set."
+
+    # if desire is to set both or just submit
+    # checks if arg one is not an empty string
+    #sets branch
+    #problem with this line
+    elif [ -n "$1" ] && [ $1 != "-b" ]  ; then
+        submit=$1
+        echo "$submit"
+    fi
+
+    # checks to see if $2 is not an empty string
+    # sets branch
+    if [ -n "$2" ]; then
+        branch=$2
+        echo "$branch"
+    fi
+fi
+
+# checks to see if current directory is a git repo
+# if so use branch name and $branch
+if [ -d .git ]; then
+    LPS=`git rev-parse --abbrev-ref HEAD`" $branch"
+# else error message goes to /dev/null
+# LPS is set to an empty string
+else
+    LPS=""
+    git rev-parse --abbrev-ref HEAD 2> /dev/null;
+fi;
+
+# tests if LPS is empty, if not makes the pull request
+if [ -n "$LPS" ]; then
+    echo "$submit $LPS $branch"
+   # echo "$LPS"
+   # echo "$submit"
+   # echo "$branch"
+   gh pr --submit "$submit" --title "$LPS" --branch "$branch"
+else
+    echo "Not in a git repository"
+fi;

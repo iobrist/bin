@@ -1,0 +1,4 @@
+cd ~/Documents/IDEA/bin/
+./idea.sh 2> /dev/null &
+smartgithg 2> /dev/null &
+cd ~

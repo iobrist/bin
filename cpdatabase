@@ -1,0 +1,1 @@
+mysqldump -u root -p lportal | mysql -u root -prootbeer lportal1;
